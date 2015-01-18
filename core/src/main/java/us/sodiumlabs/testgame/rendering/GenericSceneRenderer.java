@@ -34,15 +34,7 @@ public class GenericSceneRenderer implements SceneRenderer{
 
     @Override
     public void render(final float delta, final SpriteBatch batch) {
-        render(0, 0, delta, batch);
-    }
-
-    @Override
-    public void render(float offx, float offy, float delta, SpriteBatch batch) {
-        renderables.stream()
-                .forEach(
-                        (r) -> r.render(offx, offy, delta, batch)
-                );
+        render(0, 0, 0, delta, batch);
     }
 
 // --------------------- Interface SceneRenderer ---------------------
@@ -67,6 +59,14 @@ public class GenericSceneRenderer implements SceneRenderer{
     public void dispose() {
         batch.dispose();
         renderables.stream().forEach(Renderable::dispose);
+    }
+
+    @Override
+    public void render(float offx, float offy, float rotation, float delta, SpriteBatch batch) {
+        renderables.stream()
+                .forEach(
+                        (r) -> r.render(offx, offy, rotation, delta, batch)
+                );
     }
 
     @Override

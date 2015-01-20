@@ -8,8 +8,17 @@ public abstract class PhysicsActor implements Actor {
     private float x = 0f;
     private float y = 0f;
 
+    public float getRotationalVelocity() {
+        return rotationalVelocity;
+    }
+
+    public void setRotationalVelocity(float rotationalVelocity) {
+        this.rotationalVelocity = rotationalVelocity;
+    }
+
     private float rotationalVelocity = 0f;
     private float velocityX = 0f;
+    
     private float velocityY = 0f;
 
     private float torque = 0f;
@@ -18,7 +27,6 @@ public abstract class PhysicsActor implements Actor {
     
     private float rotation = 0f;
     private float mass = 1f;
-    private float momentInertia = 1f;
 
 // --------------------- GETTER / SETTER METHODS ---------------------
 
@@ -100,12 +108,26 @@ public abstract class PhysicsActor implements Actor {
     public void applyTorque(final float torque) {
         this.torque += torque;
     }
+    
+    public float getVelocityComponentX() { 
+        return getVelocityMagnitude() == 0 ? 0 : getVelocityX() / getVelocityMagnitude();
+    }
+
+    public float getVelocityMagnitude() {
+        return (float) Math.sqrt( getVelocityX() * getVelocityX() + getVelocityY() * getVelocityY() );
+    }
+
+    public float getVelocityComponentY() {
+        return getVelocityMagnitude() == 0 ? 0 : getVelocityY() / getVelocityMagnitude();
+    }
 
     protected void updateAngle(final float delta) {
-        rotationalVelocity += torque * delta / momentInertia;
+        rotationalVelocity += torque * delta / getMomentInertia();
 
         rotation += rotationalVelocity * delta;
     }
+    
+    public abstract float getMomentInertia();
 
     private void updatePosition(final float delta) {
         velocityX += forceX * delta / mass;

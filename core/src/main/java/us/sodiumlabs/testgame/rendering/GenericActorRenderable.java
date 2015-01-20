@@ -8,7 +8,28 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GenericActorRenderable implements ActorRenderable {
+// ------------------------------ FIELDS ------------------------------
+
     final Texture image;
+    
+    final float width, height, halfWidth, halfHeight;
+
+    float offsetRotation;
+
+    final List<Actor> actorsToRender = new LinkedList<>();
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public GenericActorRenderable(final String imageName) {
+        image = new Texture(imageName);
+
+        width = image.getWidth();
+        height = image.getHeight();
+        halfWidth = width / 2f;
+        halfHeight = height / 2f;
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     public float getOffsetRotation() {
         return offsetRotation;
@@ -18,13 +39,10 @@ public class GenericActorRenderable implements ActorRenderable {
         this.offsetRotation = offsetRotation;
     }
 
-    float offsetRotation;
+// ------------------------ INTERFACE METHODS ------------------------
 
-    final List<Actor> actorsToRender = new LinkedList<>();
 
-    public GenericActorRenderable(final String imageName) {
-        image = new Texture(imageName);
-    }
+// --------------------- Interface ActorRenderable ---------------------
 
     @Override
     public void addActor(final Actor actor) {
@@ -36,6 +54,9 @@ public class GenericActorRenderable implements ActorRenderable {
         actorsToRender.remove(actor);
     }
 
+// --------------------- Interface Renderable ---------------------
+
+
     @Override
     public void create() { }
 
@@ -45,22 +66,20 @@ public class GenericActorRenderable implements ActorRenderable {
     @Override
     public void render(final float offx, final float offy, final float rotation, final float delta, final SpriteBatch batch) {
         actorsToRender.stream().forEach(
-                a -> {
-                    batch.draw(image,
-                            a.getX() + offx,
-                            a.getY() + offy,
-                            image.getWidth() / 2,
-                            image.getHeight() / 2,
-                            image.getWidth(),
-                            image.getHeight(),
-                            1,
-                            1,
-                            a.getRotation() + rotation + getOffsetRotation(),
-                            0, 0,
-                            image.getWidth(), image.getHeight(),
-                            false, false
-                        );
-                }
+                a -> batch.draw(image,
+                        a.getX() + offx - halfWidth,
+                        a.getY() + offy - halfHeight,
+                        halfWidth,
+                        halfHeight,
+                        width,
+                        height,
+                        1,
+                        1,
+                        a.getRotation() + rotation + getOffsetRotation(),
+                        0, 0,
+                        image.getWidth(), image.getHeight(),
+                        false, false
+                    )
         );
     }
 }

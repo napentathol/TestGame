@@ -6,8 +6,8 @@ public class CarActor extends PhysicsActor {
 
     private GameInputProvider inputProvider;
 
-    private static final float ROT_TORQUE = 0x1p3f;
-    private static final float THRUST = 0x1p2f;
+    private static final float ROT_TORQUE = 0x1p5f;
+    private static final float THRUST = 0x1p6f;
 
     @Override
     public void acceptInputProvider(final GameInputProvider inputProvider) {
@@ -16,18 +16,39 @@ public class CarActor extends PhysicsActor {
 
     @Override
     public void act(final float delta) {
-        if(inputProvider.isLeft()) {
+        if(inputProvider.isBrake()) {
+            final float rotVelocityChange = ROT_TORQUE * delta / getMomentInertia();
+            final float velChange = THRUST * delta / getMass();
+
+            if(getRotationalVelocity() > rotVelocityChange) {
+                applyTorque( 0 - ROT_TORQUE);
+            } else if(getRotationalVelocity() < -rotVelocityChange) {
+                applyTorque( ROT_TORQUE);
+            } else {
+                setRotationalVelocity(0);
+            }
+
+            if(velChange < getVelocityMagnitude()) {
+                applyForces(-THRUST * getVelocityComponentX(), -THRUST * getVelocityComponentY());
+            } else {
+                setVelocityX(0);
+                setVelocityY(0);
+            }
+        } else if(inputProvider.isThrottle()) {
+            applyDirectionalForce(THRUST);
+        }
+
+        if (inputProvider.isLeft()) {
             applyTorque(ROT_TORQUE);
         } else if (inputProvider.isRight()) {
             applyTorque(-ROT_TORQUE);
         }
 
-        if(inputProvider.isThrottle()) {
-            applyDirectionalForce(THRUST);
-        } else if(inputProvider.isBrake()) {
-            applyDirectionalForce(-THRUST);
-        }
-
         super.act(delta);
+    }
+
+    @Override
+    public float getMomentInertia() {
+        return getMass();
     }
 }

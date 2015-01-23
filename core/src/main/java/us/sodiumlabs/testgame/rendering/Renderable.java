@@ -7,6 +7,6 @@ public interface Renderable {
 
     void create();
     void dispose();
-    void render(final float offx, final float offy,  final float rotation,
+    void render(final float offx, final float offy,
                 final float delta, final SpriteBatch batch);
 }

@@ -64,7 +64,7 @@ public class GenericActorRenderable implements ActorRenderable {
     public void dispose() { }
 
     @Override
-    public void render(final float offx, final float offy, final float rotation, final float delta, final SpriteBatch batch) {
+    public void render(final float offx, final float offy, final float delta, final SpriteBatch batch) {
         actorsToRender.stream().forEach(
                 a -> batch.draw(image,
                         a.getX() + offx - halfWidth,
@@ -75,7 +75,7 @@ public class GenericActorRenderable implements ActorRenderable {
                         height,
                         1,
                         1,
-                        a.getRotation() + rotation + getOffsetRotation(),
+                        a.getRotation() + getOffsetRotation(),
                         0, 0,
                         image.getWidth(), image.getHeight(),
                         false, false

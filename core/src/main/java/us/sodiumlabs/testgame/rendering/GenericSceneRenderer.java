@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import us.sodiumlabs.testgame.acting.Actor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,19 @@ public class GenericSceneRenderer implements SceneRenderer{
     private Color clearColor = new Color(0.375f, 0.375f, 0.375f, 1);
 
     private SpriteBatch batch;
+    
+    private Actor actor;
+
+    private float x, y;
+
+    private final float width, height;
+
+    private static final float BORDER = 150;
+
+    public GenericSceneRenderer(final float width, final float height) {
+        this.width = width;
+        this.height = height;
+    }
 
 // --------------------- GETTER / SETTER METHODS ---------------------
 
@@ -29,12 +43,17 @@ public class GenericSceneRenderer implements SceneRenderer{
 
 // ------------------------ INTERFACE METHODS ------------------------
 
-
 // --------------------- Interface Renderable ---------------------
 
     @Override
     public void render(final float delta, final SpriteBatch batch) {
-        render(0, 0, 0, delta, batch);
+        if(actor.getX() + x < BORDER) { x = BORDER - actor.getX(); }
+        else if(actor.getX() + x > width - BORDER) { x = width - BORDER - actor.getX(); }
+
+        if(actor.getY() + y < BORDER) { y = BORDER - actor.getY(); }
+        else if(actor.getY() + y > height - BORDER) { y = height - BORDER - actor.getY(); }
+
+        render(x, y, delta, batch);
     }
 
 // --------------------- Interface SceneRenderer ---------------------
@@ -62,11 +81,9 @@ public class GenericSceneRenderer implements SceneRenderer{
     }
 
     @Override
-    public void render(float offx, float offy, float rotation, float delta, SpriteBatch batch) {
+    public void render(float offx, float offy, float delta, final SpriteBatch batch) {
         renderables.stream()
-                .forEach(
-                        (r) -> r.render(offx, offy, rotation, delta, batch)
-                );
+                .forEach( (r) -> r.render(offx, offy, delta, batch) );
     }
 
     @Override
@@ -77,5 +94,10 @@ public class GenericSceneRenderer implements SceneRenderer{
     @Override
     public void removeRenderable(final Renderable renderable) {
         renderables.remove(renderable);
+    }
+
+    @Override
+    public void follow(final Actor actor) {
+        this.actor = actor;
     }
 }

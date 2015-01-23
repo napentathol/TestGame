@@ -1,6 +1,7 @@
 package us.sodiumlabs.testgame.rendering;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import us.sodiumlabs.testgame.acting.Actor;
 
 public interface SceneRenderer extends Renderable {
     void render(final float delta);
@@ -14,4 +15,6 @@ public interface SceneRenderer extends Renderable {
     void addRenderable(final Renderable renderable);
 
     void removeRenderable(final Renderable renderable);
+
+    void follow(final Actor actor);
 }

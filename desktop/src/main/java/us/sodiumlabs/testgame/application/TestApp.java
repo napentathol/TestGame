@@ -11,17 +11,13 @@ import us.sodiumlabs.testgame.rendering.GenericSceneRenderer;
 import us.sodiumlabs.testgame.rendering.SceneRenderer;
 
 public class TestApp extends ApplicationAdapter {
-    SceneRenderer renderer = new GenericSceneRenderer();
+    SceneRenderer renderer = new GenericSceneRenderer(800, 600);
     Texture img;
 
     Actor actor;
 
     @Override
     public void create() {
-        System.out.println(-1 % 360);
-        System.out.println(-361 % 360);
-
-
         actor = new CarActor();
 
         final ClientGameInputProvider clientProvider = new ClientGameInputProvider();
@@ -36,6 +32,7 @@ public class TestApp extends ApplicationAdapter {
         renderable.addActor(actor);
 
         renderer.addRenderable(renderable);
+        renderer.follow(actor);
     }
 
     @Override

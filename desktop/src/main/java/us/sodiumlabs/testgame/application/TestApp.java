@@ -3,12 +3,11 @@ package us.sodiumlabs.testgame.application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import us.sodiumlabs.testgame.acting.Actor;
 import us.sodiumlabs.testgame.acting.CarActor;
 import us.sodiumlabs.testgame.input.ClientGameInputProvider;
-import us.sodiumlabs.testgame.rendering.GenericActorRenderable;
-import us.sodiumlabs.testgame.rendering.GenericSceneRenderer;
-import us.sodiumlabs.testgame.rendering.SceneRenderer;
+import us.sodiumlabs.testgame.rendering.*;
 
 public class TestApp extends ApplicationAdapter {
     SceneRenderer renderer = new GenericSceneRenderer(800, 600);
@@ -25,6 +24,9 @@ public class TestApp extends ApplicationAdapter {
         actor.acceptInputProvider(clientProvider);
 
         renderer.create();
+
+        final Renderable bg = new Background("test_background.png");
+        renderer.addRenderable(bg);
 
         final GenericActorRenderable renderable =
                 new GenericActorRenderable("DevRaceCar.png");

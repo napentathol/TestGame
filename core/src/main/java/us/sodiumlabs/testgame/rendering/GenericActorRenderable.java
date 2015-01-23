@@ -10,13 +10,13 @@ import java.util.List;
 public class GenericActorRenderable implements ActorRenderable {
 // ------------------------------ FIELDS ------------------------------
 
-    final Texture image;
+    private final Texture image;
     
-    final float width, height, halfWidth, halfHeight;
+    private final float width, height, halfWidth, halfHeight;
 
-    float offsetRotation;
+    private float offsetRotation;
 
-    final List<Actor> actorsToRender = new LinkedList<>();
+    private final List<Actor> actorsToRender = new LinkedList<>();
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
@@ -64,7 +64,9 @@ public class GenericActorRenderable implements ActorRenderable {
     public void dispose() { }
 
     @Override
-    public void render(final float offx, final float offy, final float delta, final SpriteBatch batch) {
+    public void render(final float offx, final float offy,
+                       final float delta, final SpriteBatch batch)
+    {
         actorsToRender.stream().forEach(
                 a -> batch.draw(image,
                         a.getX() + offx - halfWidth,

@@ -11,8 +11,8 @@ GameState
 ---
 
 Provides utilities for:
- # Allowing the ActorManager to run it's simulations
- # Accurately rendering the scene.
+ 1. Allowing the ActorManager to run it's simulations
+ 2. Accurately rendering the scene.
 
 RenderingComposer
 ---

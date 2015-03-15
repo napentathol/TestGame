@@ -1,145 +1,38 @@
 package us.sodiumlabs.testgame.acting;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import us.sodiumlabs.testgame.math.SinCosCalculator;
 
 public abstract class PhysicsActor implements Actor {
-// ------------------------------ FIELDS ------------------------------
+    private final Body body;
 
-    private float x = 0f;
-    private float y = 0f;
-
-    public float getRotationalVelocity() {
-        return rotationalVelocity;
-    }
-
-    public void setRotationalVelocity(float rotationalVelocity) {
-        this.rotationalVelocity = rotationalVelocity;
-    }
-
-    private float rotationalVelocity = 0f;
-    private float velocityX = 0f;
-    
-    private float velocityY = 0f;
-
-    private float torque = 0f;
-    private float forceX = 0f;
-    private float forceY = 0f;
-    
-    private float rotation = 0f;
-    private float mass = 1f;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
-
-    public float getMass() {
-        return mass;
-    }
-
-    public void setMass(float mass) {
-        this.mass = mass;
-    }
-
-    public float getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
-    }
-
-    public float getVelocityX() {
-        return velocityX;
-    }
-
-    public void setVelocityX(float velocityX) {
-        this.velocityX = velocityX;
-    }
-
-    public float getVelocityY() {
-        return velocityY;
-    }
-
-    public void setVelocityY(float velocityY) {
-        this.velocityY = velocityY;
+    public PhysicsActor(final Body body) {
+        this.body = body;
     }
 
     @Override
     public float getX() {
-        return x;
-    }
-
-    @Override
-    public void setX(float x) {
-        this.x = x;
+        return body.getPosition().x;
     }
 
     @Override
     public float getY() {
-        return y;
+        return body.getPosition().y;
     }
 
     @Override
-    public void setY(float y) {
-        this.y = y;
+    public float getRotation() {
+        return body.getAngle();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Actor ---------------------
-
-    @Override
-    public void act(final float delta) {
-        updatePosition(delta);
-        updateAngle(delta);
-        zeroForces();
+    public Body getBody() {
+        return body;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void applyDirectionalForce(final float force) {
-        applyForces(SinCosCalculator.cos((int)rotation) * force, SinCosCalculator.sin((int)rotation) * force);
-    }
-
-    public void applyForces(final float x, final float y) {
-        forceX += x;
-        forceY += y;
-    }
-
-    public void applyTorque(final float torque) {
-        this.torque += torque;
-    }
-    
-    public float getVelocityComponentX() { 
-        return getVelocityMagnitude() == 0 ? 0 : getVelocityX() / getVelocityMagnitude();
-    }
-
-    public float getVelocityMagnitude() {
-        return (float) Math.sqrt( getVelocityX() * getVelocityX() + getVelocityY() * getVelocityY() );
-    }
-
-    public float getVelocityComponentY() {
-        return getVelocityMagnitude() == 0 ? 0 : getVelocityY() / getVelocityMagnitude();
-    }
-
-    protected void updateAngle(final float delta) {
-        rotationalVelocity += torque * delta / getMomentInertia();
-
-        rotation += rotationalVelocity * delta;
-    }
-    
-    public abstract float getMomentInertia();
-
-    private void updatePosition(final float delta) {
-        velocityX += forceX * delta / mass;
-        velocityY += forceY * delta / mass;
-
-        x += velocityX * delta;
-        y += velocityY * delta;
-    }
-
-    public void zeroForces() {
-        forceX = 0f;
-        forceY = 0f;
-        torque = 0f;
+        body.applyForceToCenter(
+                SinCosCalculator.cos((int) getRotation()) * force,
+                SinCosCalculator.sin((int) getRotation()) * force,
+                true);
     }
 }

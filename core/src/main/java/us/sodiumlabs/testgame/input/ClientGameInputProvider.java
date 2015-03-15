@@ -7,13 +7,24 @@ public class ClientGameInputProvider extends InputAdapter implements GameInputPr
 
     private boolean left, right, throttle, brake;
 
+    private int leftIn = Input.Keys.A,
+            rightIn = Input.Keys.D,
+            throttleIn = Input.Keys.W,
+            brakeIn = Input.Keys.S;
+
     @Override
     public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case Input.Keys.W : throttle = false;   break;
-            case Input.Keys.A : left = false;       break;
-            case Input.Keys.S : brake = false;      break;
-            case Input.Keys.D : right = false;      break;
+        if(throttleIn == keycode) {
+            throttle = false;
+        }
+        if(brakeIn == keycode) {
+            brake = false;
+        }
+        if(leftIn == keycode) {
+            left = false;
+        }
+        if(rightIn == keycode) {
+            right = false;
         }
 
         return false;
@@ -21,11 +32,17 @@ public class ClientGameInputProvider extends InputAdapter implements GameInputPr
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case Input.Keys.W : throttle = true;    break;
-            case Input.Keys.A : left = true;        break;
-            case Input.Keys.S : brake = true;       break;
-            case Input.Keys.D : right = true;       break;
+        if(throttleIn == keycode) {
+            throttle = true;
+        }
+        if(brakeIn == keycode) {
+            brake = true;
+        }
+        if(leftIn == keycode) {
+            left = true;
+        }
+        if(rightIn == keycode) {
+            right = true;
         }
 
         return false;

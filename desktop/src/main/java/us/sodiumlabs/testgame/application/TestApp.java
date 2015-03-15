@@ -2,22 +2,24 @@ package us.sodiumlabs.testgame.application;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import us.sodiumlabs.testgame.acting.Actor;
 import us.sodiumlabs.testgame.acting.CarActor;
 import us.sodiumlabs.testgame.input.ClientGameInputProvider;
 import us.sodiumlabs.testgame.rendering.*;
 
 public class TestApp extends ApplicationAdapter {
-    SceneRenderer renderer = new GenericSceneRenderer(800, 600);
-    Texture img;
+    private SceneRenderer renderer = new GenericSceneRenderer(800, 600);
 
-    Actor actor;
+    private Actor actor;
+
+    private World world;
 
     @Override
     public void create() {
-        actor = new CarActor();
+        world = new World(new Vector2(0, 0), true);
+        actor = new CarActor(world);
 
         final ClientGameInputProvider clientProvider = new ClientGameInputProvider();
         Gdx.input.setInputProcessor(clientProvider);
@@ -39,13 +41,18 @@ public class TestApp extends ApplicationAdapter {
 
     @Override
     public void render() {
-        renderer.render(Gdx.graphics.getDeltaTime());
-        actor.act(Gdx.graphics.getDeltaTime());
+        final float delta = Gdx.graphics.getDeltaTime();
+
+        renderer.render(delta);
+        actor.act(delta);
+        if(!world.isLocked()) {
+            world.step(delta, 1, 1);
+        }
     }
 
     @Override
     public void dispose() {
-        img.dispose();
         renderer.dispose();
+        world.dispose();
     }
 }

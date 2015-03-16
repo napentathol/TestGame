@@ -67,4 +67,36 @@ public class ClientGameInputProvider extends InputAdapter implements GameInputPr
     public boolean isBrake() {
         return brake && !throttle;
     }
+
+    public int getLeftIn() {
+        return leftIn;
+    }
+
+    public void setLeftIn(int leftIn) {
+        this.leftIn = leftIn;
+    }
+
+    public int getRightIn() {
+        return rightIn;
+    }
+
+    public void setRightIn(int rightIn) {
+        this.rightIn = rightIn;
+    }
+
+    public int getThrottleIn() {
+        return throttleIn;
+    }
+
+    public void setThrottleIn(int throttleIn) {
+        this.throttleIn = throttleIn;
+    }
+
+    public int getBrakeIn() {
+        return brakeIn;
+    }
+
+    public void setBrakeIn(int brakeIn) {
+        this.brakeIn = brakeIn;
+    }
 }
